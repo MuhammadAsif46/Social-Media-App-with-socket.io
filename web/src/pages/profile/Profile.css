@@ -1,0 +1,205 @@
+div.profile-page{
+    background-color: #52b788;
+}
+
+.post-create{
+    padding: 1rem 1.5rem;
+    width: 40%;
+    background-color: #fff;
+    /* margin-top: 1rem; */
+  }
+
+div.my-post{ 
+    /* color: #fff; */
+    font-size: 1rem;
+}
+
+hr{
+    color: black;
+    margin-top: 0;
+}
+
+.likeBtn{
+    color: #000;
+}
+  
+.likeBtn:hover{
+    cursor: pointer;;
+}
+  
+
+@media only screen and (min-width: 800px) and (max-width: 1050px){
+    .post-area{
+      font-size: 1.3rem;  /**/
+    }
+    .post-footer .btn{
+      color: #59626B !important;
+      padding: 0.2rem 1rem;  /**/
+      margin: 0 0.3rem; /**/  
+    }
+    .take-img{
+      width: 80%;
+    }
+    .allpost-date{
+      font-size: 1.3rem;
+    }
+    .allpost-footer .allpost-btn{
+      font-size: 0.7rem;
+    }
+  }
+  
+  @media only screen and (min-width: 501px) and (max-width: 799px){
+    .form-card{
+      display: flex;
+    }
+    
+    .post-create{
+      /* padding: 1rem 1.5rem; */
+      width: 60%;
+      background-color: #fff;
+    }
+  
+    .post-main{
+      margin-top: 0.5rem;
+      padding: 1rem 1.5rem;
+      width: 60%;
+      background-color: #b7e4c7;
+    }
+  
+    .post-area{
+      font-size: 1.3rem;
+    }
+  
+    .post-footer .btn{
+      color: #59626B !important;
+      padding: 0.2rem 1rem;  
+      margin: 0 0.3rem;   
+    }
+  
+    .take-img{
+      width: 80%;
+    }
+  
+    .post-date{
+      font-size: 0.9rem;
+    }
+  
+    .allpost-date{
+      font-size: 1.1rem;
+    }
+  
+    .allpost-footer .allpost-btn{
+      padding: 0.6rem 0.5rem;
+      font-size: 0.7rem;
+  }
+  
+    .home-page-header{
+      display: flex;
+      /* justify-content: center; */
+  }
+  
+  div.nav-first-child{
+      display: flex;
+      justify-content: center;
+      /* background-color: #b7e4c7; */
+      /* border: 2px solid red; */
+      /* padding: 0 0.5rem; */
+      /* align-items: center; */
+      width: 60%;
+  }
+  div.nav-second-child{
+      display: flex;
+      justify-content: center;
+      /* background-color: #b7e4c7; */
+      /* border: 2px solid blue; */
+      /* padding: 0 0.5rem; */
+      /* align-items: center; */
+      width: 60%;
+  }
+  .editBtn,
+  .deleteBtn{
+      width: 30%;
+  }
+  div.all-post{ 
+    font-size: 1rem;
+  }
+  
+  }
+  
+  @media only screen and (max-width: 500px){
+    .form-card{
+      display: flex;
+    }
+    
+    .post-create{
+      /* padding: 1rem 1.5rem; */
+      width: 100%;
+      background-color: #fff;
+    }
+  
+    .post-main{
+      margin-top: 0.5rem;
+      padding: 1rem 1.5rem;
+      width: 100%;
+      background-color: #b7e4c7;
+    }
+  
+    .post-area{
+      font-size: 1.3rem;
+    }
+  
+    .post-footer .btn{
+      color: #59626B !important;
+      padding: 0.2rem 1rem;  
+      margin: 0 0.3rem;   
+    }
+  
+    .take-img{
+      width: 80%;
+    }
+  
+    .post-date{
+      font-size: 0.8rem;
+    }
+  
+    .allpost-date{
+      font-size: 1.1rem;
+    }
+  
+    .allpost-footer .allpost-btn{
+      padding: 0.6rem 0.5rem;
+      font-size: 0.7rem;
+  }
+  
+    .home-page-header{
+      display: flex;
+      /* justify-content: center; */
+  }
+  
+  div.nav-first-child{
+      display: flex;
+      justify-content: center;
+      /* background-color: #b7e4c7; */
+      /* border: 2px solid red; */
+      /* padding: 0 0.5rem; */
+      /* align-items: center; */
+      width: 100%;
+  }
+  div.nav-second-child{
+      display: flex;
+      justify-content: center;
+      /* background-color: #b7e4c7; */
+      /* border: 2px solid blue; */
+      /* padding: 0 0.5rem; */
+      /* align-items: center; */
+      width: 100%;
+  }
+  .editBtn,
+  .deleteBtn{
+      width: 40%;
+  }
+  div.all-post{ 
+    font-size: 1rem;
+  }
+  
+  }

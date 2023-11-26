@@ -1,0 +1,76 @@
+a{
+    text-decoration: none;
+    color: inherit;
+    list-style: none;
+}
+
+
+
+body{
+    background-color: #52b788;
+}
+/* home page nav bar  */
+
+.nav-bar{
+    display: flex;
+    list-style: none;
+    margin-top: 1rem;
+    /* border: 1px solid black; */
+    width: 100%;
+}
+
+ul{
+    padding: 0;
+}
+
+.home-page-header{
+    display: flex;
+    justify-content: center;
+}
+
+div.nav-first-child{
+    display: flex;
+    justify-content: center;
+    background-color: darkseagreen;
+    /* border: 2px solid red; */
+    padding: 0 0.5rem;
+    align-items: center;
+    width: 40%;
+}
+div.nav-second-child{
+    display: flex;
+    justify-content: center;
+    background-color: #40916c;
+    /* border: 2px solid blue; */
+    /* padding: 0 0.5rem; */
+    align-items: center;
+    width: 40%;
+}
+
+.nav-bar-list{
+    width: 25%;
+    text-align: center;
+    font-size: 1.7rem;
+}
+
+.home-page-navBar:hover{
+    /* background-color: red; */
+    color: darkseagreen;
+}
+
+
+div.login-person-name{
+    font-size: 1.5rem;
+}
+
+/* splash screen styles */
+
+div.screen{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.splashScreen{
+    height: 100vh; 
+}

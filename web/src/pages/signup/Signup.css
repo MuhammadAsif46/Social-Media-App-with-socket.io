@@ -1,0 +1,23 @@
+.errorMessage{
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+}
+.alertMessage{
+    font-size: 1rem;
+    text-align: center;
+    color: blue;
+}
+.hidden{
+    display: none;
+}
+
+/* signUp form styles */
+
+div.container-signup{
+    padding: 1rem;
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    margin-top: 3rem;
+}

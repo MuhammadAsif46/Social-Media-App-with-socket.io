@@ -1,0 +1,8 @@
+div.user-list-container{
+    border: 1px solid red;
+    padding: 1rem;
+}
+
+div.each-user{
+    border: 1px solid black;
+}
