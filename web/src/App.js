@@ -245,6 +245,7 @@ const App = () => {
             />
             <Route path="/about" element={<About />} />
             <Route path="/userList" element={<UserList />} />
+            <Route path="/chat/:userId" element={<Chat />} />
             <Route
               path="/profile/:userId"a
               element={

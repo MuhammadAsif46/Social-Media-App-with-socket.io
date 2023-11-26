@@ -50,9 +50,7 @@ router.post("/message", multer().none(), async (req, res, next) => {
             fromName: req.currentUser.firstName + " " + req.currentUser.lastName,
             fromEamil: req.currentUser.email, // malik@abc.com
             from_id: new ObjectId(req.currentUser._id), // 245523423423424234
-
             to_id: new ObjectId(req.body.to_id),
-
             messageText: req.body.messageText,
             imgUrl: req.body.imgUrl,
             createdOn: new Date()
@@ -72,7 +70,7 @@ router.post("/message", multer().none(), async (req, res, next) => {
                 `new message from ${req.currentUser.firstName}: ${req.body.messageText}`
             );
         }else{
-            console.log("this iser is not online");
+            console.log("this user is not online");
         }
         res.send({ message: 'message sent' });
     
@@ -104,7 +102,7 @@ router.get("/messages/:from_id", async (req, res, next) => {
         $or: [
             {
                 to_id: new ObjectId(req.currentUser._id),
-                from_id: new ObjectId(req.params.from_id),
+                from_id: new ObjectId(req.params.from_id)
             }
             ,
             {

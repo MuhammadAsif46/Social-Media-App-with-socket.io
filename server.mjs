@@ -177,6 +177,6 @@ io.on("connection", (socket) => {
 })
 
 const PORT = process.env.PORT || 4001;          // Define PORT 
-app.listen(PORT, () => {                        // Listen on port
+server.listen(PORT, () => {                        // Listen on port
   console.log(`Example server listening on port ${PORT}`);
 });

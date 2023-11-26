@@ -6,12 +6,19 @@ import axios from "axios";
 import { baseUrl } from "../../core";
 import { GlobalContext } from "../../context/Context";
 import io from "socket.io-client";
+import moment from "moment";
 
 import './Chat.css'
 
 const Chat = () => {
     let { state, dispatch } = useContext(GlobalContext);
     
+    const [chat, setChat] = useState([]);
+    const params = useParams();
+    const messageText = useRef("")
+    const [isLoading, setIsLoading] = useState(false);
+    const [toggleRefresh, setToggleRefresh] = useState(false);
+   
     useEffect(() => {
 
         const socket = io(baseUrl, {
@@ -27,9 +34,7 @@ const Chat = () => {
 
         socket.on("NEW_MESSAGE", (e) => {
             console.log("a new message for you: ", e);
-            setChat((prev) => {
-                return [e, ...prev]
-            });
+            setChat(prev => [e, ...prev])
 
         })
 
@@ -40,12 +45,7 @@ const Chat = () => {
 
     // console.log("state: ", state);
 
-    const params = useParams();
-    const messageText = useRef("")
     
-    const [isLoading, setIsLoading] = useState(false);
-    const [chat, setChat] = useState([]);
-    const [toggleRefresh, setToggleRefresh] = useState(false);
 
 
     // console.log("params: ", params);
@@ -95,7 +95,7 @@ const Chat = () => {
 
             setIsLoading(false);
             setToggleRefresh(!toggleRefresh)
-            // console.log(response.data);
+            console.log(response.data);
             event.target.reset();
             // handle error
         } catch (error) {
@@ -111,7 +111,8 @@ const Chat = () => {
                 {chat.map((eachMessage, index) => (
 
                     <div key={index} className={`chatBaloon ${(eachMessage.from_id === state.user._id) ? "my" : "your"}`}>
-                        {eachMessage.messageText}
+                        <div style={{fontSize: "18px"}}>{eachMessage.messageText}</div>
+                        <span style={{fontSize: "11px"}}>{moment(eachMessage.createdOn).fromNow()}</span>
                     </div>
                 ))}
                 
@@ -125,4 +126,4 @@ const Chat = () => {
         </div>
     ); 
 }
-export default Chat;
+export default Chat;    
