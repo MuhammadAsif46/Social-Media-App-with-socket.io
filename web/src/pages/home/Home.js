@@ -10,8 +10,8 @@ import { BsCalendarEvent } from "react-icons/bs";
 import { PiArticle } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
 import { BiCommentDetail } from "react-icons/bi";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
-// import { PiShareFat } from "react-icons/pi";
+// import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { PiShareFat } from "react-icons/pi";
 import swal from "sweetalert2";
 import moment from "moment";
 
@@ -230,11 +230,11 @@ export default function Home({ profileImg, userName }) {
         <form id="formReset" onSubmit={submitHandler} className="form-card">
           <div className="post-create">
             <div className="post-header">
-              <img src={profileImg} width={65} height={65} alt="my-image" />
+              <img src={profileImg} style={{objectFit:"contain"}} width={70} height={70} alt="my-image" />
               <div>
                 <div className="post-name">{userName}</div>
                 <div className="post-date">
-                  {moment().format("D MMM YYYY, h:mm:ss a")}
+                  {moment().format('D MMM YYYY, h:mm:ss a')}
                 </div>
               </div>
             </div>
@@ -344,7 +344,7 @@ export default function Home({ profileImg, userName }) {
                         {post.authorObject.lastName}
                       </div>
                       {/* <div className="date">{post.authorObject.firstName} {post.authorObject.lastName} - {post.authorObject.email}</div> */}
-                      <div className="allpost-date">{moment().fromNow()}</div>
+                      <div className="allpost-date">{moment(post.createdOn).fromNow()}</div>
                     </div>
                   </div>
 
@@ -382,13 +382,13 @@ export default function Home({ profileImg, userName }) {
                       />
                       Comment
                     </div>
-                    {/* <div className="btn">
+                    <div className="allpost-btn">
                       <PiShareFat
                         style={{ color: "#495057", marginRight: "5px" }}
                       />
                       Share
-                    </div> */}
-                    <div className="allpost-btn">
+                    </div>
+                    {/* <div className="allpost-btn">
                       <IoChatbubbleEllipsesOutline
                         style={{ color: "#495057", marginRight: "5px" }}
                       />
@@ -401,7 +401,7 @@ export default function Home({ profileImg, userName }) {
                       >
                         Message
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                   <br />
                   <div className="buttons">

@@ -17,8 +17,9 @@ import Profile from "./pages/profile/Profile";
 import ForgetPassword from "./pages/forgetPassword/ForgetPassword";
 import ForgetPasswordComplete from "./pages/forgetPasswordComplete/ForgetPasswordComplete";
 
-import profileImg1 from "./assets/my-image.jpg";
-import profileImg2 from "./assets/manImage.jpg";
+// import profileImg1 from "./assets/my-image.jpg";
+// import profileImg2 from "./assets/manImage.jpg";
+import profileImg from "./assets/profile2.jpg"
 import splashScreen from "./assets/splash.gif";
 
 
@@ -237,7 +238,7 @@ const App = () => {
               path="/"
               element={
                 <Home
-                  profileImg={profileImg2}
+                  profileImg={profileImg}
                   userName={`${state.user.firstName} ${state.user.lastName}`}
                   // email={state.user.email}
                 />
@@ -250,7 +251,7 @@ const App = () => {
               path="/profile/:userId"a
               element={
                 <Profile
-                  profileImg={profileImg2}
+                  profileImg={profileImg}
                   userName={`${state.user.firstName} ${state.user.lastName}`}
                 />
               }
@@ -335,7 +336,7 @@ const App = () => {
               path="/"
               element={
                 <Home
-                  profileImg={profileImg1}
+                  profileImg={profileImg}
                   userName={`${state.user.firstName} ${state.user.lastName}`}
                   // email={state.user.email}
                 />
@@ -348,7 +349,7 @@ const App = () => {
               path="/profile/:userId"
               element={
                 <Profile
-                  profileImg={profileImg1}
+                  profileImg={profileImg}
                   userName={`${state.user.firstName} ${state.user.lastName}`}
                 />
               }
@@ -380,7 +381,7 @@ const App = () => {
               path="profile/:userId"
               element={
                 <Profile
-                  profileImg={profileImg2}
+                  profileImg={profileImg}
                   userName={`${state.user.firstName} ${state.user.lastName}`}
                   // userName="farhan ahmed"
                 />

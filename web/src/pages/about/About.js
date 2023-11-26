@@ -44,6 +44,5 @@ const About = () => {
 };
 export default About;
 
-{
-  /* <div>{JSON.stringify(state)}</div> */
-}
+
+//  <h4>{JSON.stringify(state)}</h4>
