@@ -43,7 +43,7 @@ const UserList = () => {
               <div key={idx}>
                 <h4>
                   {eachUser.firstName} {eachUser.lastName}{" "}
-                  <span className="admin">{eachUser.me ? <span>Admin</span> : null}</span>
+                  <span className="admin">{eachUser.me ? <span>(me)</span> : null}</span>
                 </h4>
               </div>
             </Link>
