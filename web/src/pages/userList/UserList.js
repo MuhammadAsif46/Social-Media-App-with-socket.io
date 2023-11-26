@@ -38,16 +38,16 @@ const UserList = () => {
     <div class="user-list-container">
       {users.map((eachUser, idx) => {
         return (
-        //   <div>
-            <Link to={`/chat/${eachUser._id}`}>
-              <div class="each-user" key={idx}>
-                <h3>
+          <div className="each-user">
+            <Link to={`/chat/${eachUser._id}`} >
+              <div key={idx}>
+                <h4>
                   {eachUser.firstName} {eachUser.lastName}{" "}
-                  {eachUser.me ? <span>Admin</span> : null}
-                </h3>
+                  <span className="admin">{eachUser.me ? <span>Admin</span> : null}</span>
+                </h4>
               </div>
             </Link>
-        //   </div>
+            </div>
         );
       })}
     </div>
