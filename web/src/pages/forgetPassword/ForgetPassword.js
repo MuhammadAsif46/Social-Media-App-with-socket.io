@@ -1,10 +1,14 @@
+// Import react:
 import { useState, useRef, useEffect, useContext } from "react";
+import { GlobalContext } from "../../context/Context";
+
+// Import Libraries:
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-import { GlobalContext } from "../../context/Context";
-
+// Import data from file:
 import { baseUrl } from "../../core";
+
 
 const ForgetPassword = () => {
   const navigate = useNavigate();
@@ -23,6 +27,8 @@ const ForgetPassword = () => {
     }, 5000);
   }, [alertMessage, errorMessage]);
 
+  // Function:
+  // POST: forget password
   const ForgetPasswordSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -31,8 +37,8 @@ const ForgetPassword = () => {
         email: emailInputRef.current.value,
       });
 
-      console.log("otp", response.data.otp);
-      console.log("response: ", response?.data?.message);
+      // console.log("otp", response.data.otp);
+      // console.log("response: ", response?.data?.message);
       setAlertMessage(response?.data?.message);
       navigate(`/forget-password-complete`, {
         state: { email: emailInputRef.current.value, otp: response.data.otp },

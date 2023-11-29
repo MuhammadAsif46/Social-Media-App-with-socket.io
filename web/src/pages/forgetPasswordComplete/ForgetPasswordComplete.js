@@ -1,9 +1,12 @@
+// Import react:
 import { useState, useRef, useEffect, useContext } from "react";
-import axios from "axios";
-import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
-
 import { GlobalContext } from "../../context/Context";
 
+// Import Libraries:
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import axios from "axios";
+
+// Import data from file:
 import { baseUrl } from "../../core";
 
 const ForgetPasswordComplete = () => {
@@ -11,10 +14,10 @@ const ForgetPasswordComplete = () => {
   let { state, dispatch } = useContext(GlobalContext);
   
   const location = useLocation();
-  console.log("email: ", location.state.email);
+  // console.log("email: ", location.state.email);
 
   const otp = location.state.opt;
-  console.log("otp--->",otp);
+  // console.log("otp--->",otp);
 
 
   const emailInputRef = useRef(null);
@@ -32,6 +35,8 @@ const ForgetPasswordComplete = () => {
     }, 5000);
   }, [alertMessage, errorMessage]);
 
+  // Function:
+  // POST: forget password complete
   const LoginSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -45,7 +50,7 @@ const ForgetPasswordComplete = () => {
         }
       );
 
-      console.log("response: ", response?.data?.message);
+      // console.log("response: ", response?.data?.message);
       setAlertMessage(response?.data?.message);
 
     } catch (e) {

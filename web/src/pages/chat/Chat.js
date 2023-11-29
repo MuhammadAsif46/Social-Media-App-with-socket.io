@@ -1,23 +1,29 @@
-
-import { useParams } from "react-router-dom";
+// Import react:
 import { useState, useRef, useEffect, useContext } from "react";
-import axios from "axios";
-import { baseUrl } from "../../core";
 import { GlobalContext } from "../../context/Context";
+
+// Import Libraries: 
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import io from "socket.io-client";
 import moment from "moment";
 
-
-import "./Chat.css";
+// Import data from files:
+import { baseUrl } from "../../core";
 import profileImg from "./../../assets/user-image.png";
+import "./Chat.css";
 
 
 const Chat = () => {
+  
   let { state, dispatch } = useContext(GlobalContext);
-
-  const [chat, setChat] = useState([]);
+  
   const params = useParams();
+  // console.log("params: ", params);
+
   const messageText = useRef("");
+  
+  const [chat, setChat] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [toggleRefresh, setToggleRefresh] = useState(false);
   const [user, setUser] = useState("");
@@ -48,20 +54,28 @@ const Chat = () => {
     };
   }, []);
 
+  useEffect(() => {
+    getChat();
+
+    return () => {};
+  }, [toggleRefresh]);
+
   // console.log("state: ", state);
 
+  // Functions:
+
+  // GET: user from  userId
   const getUser = async (userId) => {
     try {
       const response = await axios.get(`${baseUrl}/api/v1/user/${userId}`);
       setUser(response.data)
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // console.log("params: ", params);
-
+  // GET: messages from userId
   const getChat = async () => {
     try {
       setIsLoading(true);
@@ -78,12 +92,7 @@ const Chat = () => {
     }
   };
 
-  useEffect(() => {
-    getChat();
-
-    return () => {};
-  }, [toggleRefresh]);
-
+  // POST: send message
   const sendMessageHandler = async (event) => {
     event.preventDefault();
     // console.log(messageText.current.value);
@@ -103,7 +112,7 @@ const Chat = () => {
 
       setIsLoading(false);
       setToggleRefresh(!toggleRefresh);
-      console.log(response.data);
+      // console.log(response.data);
       event.target.reset();
       // handle error
     } catch (error) {

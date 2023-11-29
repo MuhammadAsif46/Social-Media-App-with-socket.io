@@ -1,12 +1,16 @@
+// Import react:
 import { useEffect, useState, useContext } from "react";
 import "./App.css";
-import { Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
+
+// Import Libraries:
 import axios from "axios";
+import { Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
 import io from "socket.io-client";
 import { IoHome, IoLogOutOutline, IoChatbubbleEllipsesOutline} from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { FcAbout } from "react-icons/fc";
 
+// Import Routes:
 import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import UserList from "./pages/userList/UserList";
@@ -17,14 +21,12 @@ import Profile from "./pages/profile/Profile";
 import ForgetPassword from "./pages/forgetPassword/ForgetPassword";
 import ForgetPasswordComplete from "./pages/forgetPasswordComplete/ForgetPasswordComplete";
 
-// import profileImg1 from "./assets/my-image.jpg";
-// import profileImg2 from "./assets/manImage.jpg";
+// Import data from files:
 import profileImg from "./assets/profile2.jpg"
 import splashScreen from "./assets/splash.gif";
-
-
-import { GlobalContext } from "./context/Context";
 import { baseUrl } from "./core";
+import { GlobalContext } from "./context/Context";
+
 
 const App = () => {
   const { state, dispatch } = useContext(GlobalContext);
@@ -103,6 +105,7 @@ const App = () => {
     checkLoginStatus();
   }, []);
 
+  // Functions:
   const logoutHandler = async () => {
     try {
       await axios.post(
@@ -162,7 +165,6 @@ const App = () => {
           </div>
         ))}
       </div>
-
 
       {/* admin routes */}
       {state.isLogin === true && state.role === "admin" ? (
@@ -363,17 +365,6 @@ const App = () => {
       {/* unAuth routes */}
       {state.isLogin === false ? (
         <>
-          {/* <nav>
-            <ul className="nav-bar">
-              <li>
-                <Link class="btn btn-outline-primary login-page-navBar" to={`/login`}>Login</Link>
-              </li>
-              <li>
-                <Link class="btn btn-outline-primary login-page-navBar" to={`/signup`}>Signup</Link>
-              </li>
-            </ul>
-          </nav> */}
-
           <Routes>
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
