@@ -91,13 +91,34 @@ div.chat-main{
     border-radius: 1rem;
 }
 
+div.user-name{
+    background-color: #a3b18a;
+    width: 40%;
+    padding: 5px 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+div.user-name h4{
+    margin-top: 10px;
+    margin-left: 6px;
+}
+
+.user-image{
+    object-fit: contain;
+}
+
+
 @media only screen and (min-width: 800px) and (max-width: 1050px){
     #writeMessageForm {
         width: 40%;
     }
     #chatWindow {
         width: 40%;
-        max-height: 320px;
+        max-height: 270px;
+    }
+    div.user-name{
+        width: 40%;
     }
 }
 
@@ -107,7 +128,10 @@ div.chat-main{
     }
     #chatWindow {
         width: 60%;
-        max-height: 320px;
+        max-height: 270px;
+    }
+    div.user-name{
+        width: 60%;
     }
 }
 
@@ -117,7 +141,9 @@ div.chat-main{
     }
     #chatWindow {
         width: 100%;
-        max-height: 320px;
-        
+        max-height: 270px;    
+    }
+    div.user-name{
+        width: 100%;
     }
 }

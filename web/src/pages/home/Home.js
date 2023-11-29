@@ -249,7 +249,7 @@ export default function Home({ profileImg, userName }) {
               // required
             ></textarea>
             <br />
-            <input ref={postFileInputRef} id="postFileInput" className="take-img" type="file" name="postFileInput"
+            <input hidden ref={postFileInputRef} id="postFileInput" className="take-img" type="file" name="postFileInput"
                 accept="image/*" onChange={(e) => {
                   const base64Url = URL.createObjectURL(e.target.files[0]);
                   setSelectedImage(base64Url)
@@ -261,10 +261,10 @@ export default function Home({ profileImg, userName }) {
               height={200} src={selectedImage} alt="seleted-image" /> }
             </div>
             <div className="post-footer">
-              <div className="btn">
+              <label htmlFor="postFileInput" className="btn">
                 <GoFileMedia style={{ color: "blue", marginRight: "5px" }} />
                 Media
-              </div>
+              </label>
               <div className="btn">
                 <BsCalendarEvent
                   style={{ color: "orange", marginRight: "5px" }}
