@@ -1,10 +1,14 @@
+// Import react:
 import { useRef, useState, useEffect, useContext } from "react";
+import { GlobalContext } from "../../context/Context";
+
+// Import Libraries:
 import axios from "axios";
-import "./Login.css";
 import { Link } from "react-router-dom";
 
+// Import data from files:
 import { baseUrl } from "../../core";
-import { GlobalContext } from "../../context/Context";
+import "./Login.css";
 
 const Login = () => {
   const { state, dispatch } = useContext(GlobalContext);
@@ -22,9 +26,9 @@ const Login = () => {
     }, 2000);
   }, [alertMessage, errorMessage]);
 
+  //Functions:
   const loginSubmitHandler = async (e) => {
     e.preventDefault();
-    // console.log("Login submit handler");
 
     try {
       const response = await axios.post(
@@ -43,7 +47,7 @@ const Login = () => {
         payload: response.data.data,
       });
 
-      console.log("response: ", response?.data?.message);
+      // console.log("response: ", response?.data?.message);
       setAlertMessage(response?.data?.message);
       e.target.reset();
     } catch (e) {

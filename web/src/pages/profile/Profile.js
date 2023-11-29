@@ -1,8 +1,10 @@
-import "./Profile.css";
+// Import react:
+import { useEffect, useRef, useState, useContext } from "react";
+import { GlobalContext } from "../../context/Context";
+
+// Import Libraries: 
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useEffect, useRef, useState, useContext } from "react";
-
 import { GoFileMedia } from 'react-icons/go';
 import { BsCalendarEvent } from 'react-icons/bs';
 import { PiArticle } from 'react-icons/pi';
@@ -12,12 +14,15 @@ import { PiShareFat } from "react-icons/pi";
 import swal from "sweetalert2";
 import moment from "moment";
 
+// Import data from files:
 import { baseUrl } from "../../core";
-import { GlobalContext } from "../../context/Context";
+import "./Profile.css";
 
 
 export default function Profile({profileImg, userName }) {
+
   const { state, dispatch } = useContext(GlobalContext);
+  const { userId } = useParams();
 
   // const postTitleInputRef = useRef(null);
   const postTextInputRef = useRef(null);
@@ -28,58 +33,9 @@ export default function Profile({profileImg, userName }) {
   const [alert, setAlert] = useState(null);
   const [editAlert, setEditAlert] = useState(null);
   const [profile, setProfile] = useState(null);
-  
   const [allPosts, setAllPosts] = useState([]);
   const [toggleRefresh, setToggleRefresh] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
-
-  const { userId } = useParams();
-
-  const getAllPost = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(
-        `${baseUrl}/api/v1/posts?_id=${userId || ""}`,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(response.data);
-
-      setIsLoading(false);
-      setAllPosts([...response.data]);
-    } catch (error) {
-      console.log(error.data);
-      setIsLoading(false);
-    }
-    // try {
-    //     setIsLoading(true);
-    //     const response = await axios.get(`${baseUrl}/api/v1/posts?_id=${userId || ""}` ,{
-    //         withCredentials: true
-    //     })
-    //     console.log(response.data);
-
-    //     setIsLoading(false);
-    //     setAllPosts([...response.data]);
-
-    // } catch (error) {
-    //     // handle error
-    //     console.log(error.data);
-    //     setIsLoading(false);
-    // }
-  };
-
-  const getProfile = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(`${baseUrl}/api/v1/profile/${userId || ""}`);
-      console.log(response.data);
-      setProfile(response.data);
-    } catch (error) {
-      // handle error
-      console.log(error.data);
-    }
-  };
 
   useEffect(() => {
     getAllPost();
@@ -89,53 +45,56 @@ export default function Profile({profileImg, userName }) {
       setAlert("");
 
     },2000)
-    
-    // return ()=>{
-    //     // cleanup function
-    // }
 
   }, [toggleRefresh, alert]);
 
+  //Functions:
+  // GET: user profile all post with userId
+  const getAllPost = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `${baseUrl}/api/v1/posts?_id=${userId || ""}`,
+        {
+          withCredentials: true,
+        }
+      );
+      // console.log(response.data);
+
+      setIsLoading(false);
+      setAllPosts([...response.data]);
+    } catch (error) {
+      console.log(error.data);
+      setIsLoading(false);
+    }
+  };
+
+  // GET: user profile with userId
+  const getProfile = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`${baseUrl}/api/v1/profile/${userId || ""}`);
+      // console.log(response.data);
+      setProfile(response.data);
+    } catch (error) {
+      // handle error
+      console.log(error.data);
+    }
+  };
+
+  
   // Sweet Alert function:
   const publishPost = () => {
     swal.fire("Success!", "Your Post have been Publish Thank you!", "success");
   };
 
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     setIsLoading(true);
-
-  //     const response = await axios.post(`${baseUrl}/api/v1/post`, {
-  //       text: postTextInputRef.current.value,
-  //     });
-
-  //     setIsLoading(false);
-  //     console.log(response.data);
-  //     setAlert(response.data.message);
-  //     setToggleRefresh(!toggleRefresh);
-  //     publishPost();
-  //     e.target.reset();
-  //   } catch (error) {
-  //     // handle error
-  //     console.log(error?.data);
-  //     setIsLoading(false);
-  //   }
-  // };
-
-
-
+  // POST: user create post 
   const submitHandler = async (e) => {
     e.preventDefault();
 
     try {
       setIsLoading(true);
 
-      // const response = await axios.post(`${baseUrl}/api/v1/post`, {
-      //   // title: postTitleInputRef.current.value,
-      //   text: postTextInputRef.current.value,
-      // });
 
       let formData = new FormData();
 
@@ -151,7 +110,7 @@ export default function Profile({profileImg, userName }) {
         })
 
       setIsLoading(false);
-      console.log(response.data);
+      // console.log(response.data);
       setAlert(response.data.message);
       setToggleRefresh(!toggleRefresh);
       setSelectedImage("");
@@ -164,6 +123,7 @@ export default function Profile({profileImg, userName }) {
     }
   };
 
+  // DELETE: user delete with userId
   const deletePostHandler = async (_id) => {
     try {
       setIsLoading(true);
@@ -174,7 +134,7 @@ export default function Profile({profileImg, userName }) {
       });
 
       setIsLoading(false);
-      console.log(response.data);
+      // console.log(response.data);
       setAlert(response.data.message);
       setToggleRefresh(!toggleRefresh);
     } catch (error) {
@@ -184,6 +144,7 @@ export default function Profile({profileImg, userName }) {
     }
   };
 
+  // PUT: user edit post with userId
   const editSaveSubmitHandler = async (e) => {
     e.preventDefault();
     const _id = e.target.elements[0].value;
@@ -199,7 +160,7 @@ export default function Profile({profileImg, userName }) {
       });
 
       setIsLoading(false);
-      console.log(response.data);
+      // console.log(response.data);
       setAlert(response?.data?.message);
       setToggleRefresh(!toggleRefresh);
     } catch (error) {
@@ -252,7 +213,6 @@ export default function Profile({profileImg, userName }) {
   };
 
   const cancelPost = (post) => {
-    // console.log("check cancel post");
     swal
       .fire({
         icon: "warning",
@@ -272,7 +232,7 @@ export default function Profile({profileImg, userName }) {
     <div className="profile-page">
       {state.user._id === userId && (
         <form id="formReset" onSubmit={submitHandler} className="form-card">
-        <div className="post-create">
+          <div className="post-create">
           <div className="post-header">
             <img src={profileImg} width={65} height={65} alt="my-image" />
             <div>
@@ -291,7 +251,7 @@ export default function Profile({profileImg, userName }) {
             required
           ></textarea>
           <br />
-            <input ref={postFileInputRef} id="postFileInput" className="take-img" type="file" name="postFileInput"
+            <input hidden ref={postFileInputRef} id="postFileInput" className="take-img" type="file" name="postFileInput"
                 accept="image/*" onChange={(e) => {
                   const base64Url = URL.createObjectURL(e.target.files[0]);
                   setSelectedImage(base64Url)
@@ -304,10 +264,10 @@ export default function Profile({profileImg, userName }) {
             </div>
 
           <div className="post-footer">
-            <div className="btn">
+            <label htmlFor="postFileInput" className="btn">
               <GoFileMedia style={{color: "blue", marginRight: "5px"}}/>
               Media
-            </div>
+            </label>
             <div className="btn">
               <BsCalendarEvent style={{color: "orange", marginRight: "5px"}}/> 
               Event
@@ -324,21 +284,12 @@ export default function Profile({profileImg, userName }) {
             {alert && alert}
             {isLoading && "Loading...."}
           </span>
-        </div>
-      </form>
+          </div>
+        </form>
       )}
 
       <div className="all-post">
-        {/* <div className="banner">
-          <img className="bannerImg" src="./" alt="" />
-          <img className="bannerImg" src="./" alt="" />
-          <div className="profileName">
-            <h1>
-              {profile?.data?.firstName} {profile?.data?.lastName}
-            </h1>
-          </div>
-        </div> */}
-
+        
         {allPosts.map((post, index) => (
           <div className="post" key={post._id}>
             {post.isEdit ? (
@@ -388,7 +339,7 @@ export default function Profile({profileImg, userName }) {
                     />
                     <div>
                       <div className="post-name">{userName}</div>
-                      <div className="date">{moment().fromNow()}</div>
+                      <div className="date">{moment(post.createdOn).fromNow()}</div>
                     </div>
                   </div>
                   <div className="post-data">
@@ -454,3 +405,10 @@ export default function Profile({profileImg, userName }) {
     </div>
   );
 }
+
+
+
+// const response = await axios.post(`${baseUrl}/api/v1/post`, {
+//   // title: postTitleInputRef.current.value,
+//   text: postTextInputRef.current.value,
+// });

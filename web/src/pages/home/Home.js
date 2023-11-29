@@ -1,16 +1,18 @@
-import "./Home.css";
-import axios from "axios";
+// Import react:
 import { useEffect, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 
+// Import data from files:
 import { baseUrl } from "../../core";
+import "./Home.css";
 
+// Import Libraries:
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 import { GoFileMedia } from "react-icons/go";
 import { BsCalendarEvent } from "react-icons/bs";
 import { PiArticle } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
 import { BiCommentDetail } from "react-icons/bi";
-// import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { PiShareFat } from "react-icons/pi";
 import swal from "sweetalert2";
 import moment from "moment";
@@ -26,29 +28,9 @@ export default function Home({ profileImg, userName }) {
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [editAlert, setEditAlert] = useState(null);
-  
   const [allPosts, setAllPosts] = useState([]);
   const [toggleRefresh, setToggleRefresh] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
-
-  const getAllPost = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(`${baseUrl}/api/v1/feed`, {
-        withCredentials: true,
-      });
-      console.log(response.data);
-
-      setIsLoading(false);
-      setAllPosts([...response.data]);
-    } catch (error) {
-      // handle error
-      console.log(error.data);
-      setIsLoading(false);
-    }
-  };
-
-  
 
   useEffect(() => {
     getAllPost();
@@ -59,26 +41,41 @@ export default function Home({ profileImg, userName }) {
     //     // cleanup function
     // }
   }, [toggleRefresh, alert]);
+  
+  //Functions:
+  // GET: all post users
+  const getAllPost = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`${baseUrl}/api/v1/feed`, {
+        withCredentials: true,
+      });
+      // console.log(response?.data);
+
+      setIsLoading(false);
+      setAllPosts([...response.data]);
+    } catch (error) {
+      // handle error
+      console.log(error.data);
+      setIsLoading(false);
+    }
+  };
+
 
   // Sweet Alert function:
   const publishPost = () => {
     swal.fire("Success!", "Your Post have been Publish Thank you!", "success");
   };
 
+  // POST: create user new post
   const submitHandler = async (e) => {
     e.preventDefault();
 
     try {
       setIsLoading(true);
 
-      // const response = await axios.post(`${baseUrl}/api/v1/post`, {
-      //   // title: postTitleInputRef.current.value,
-      //   text: postTextInputRef.current.value,
-      // });
-
       let formData = new FormData();
-
-      // formData.append("title", postTitleInputRef.current.value);
+      
       formData.append("text", postTextInputRef.current.value);
       formData.append("image", postFileInputRef.current.files[0]);
 
@@ -90,7 +87,7 @@ export default function Home({ profileImg, userName }) {
         })
 
       setIsLoading(false);
-      console.log(response.data);
+      // console.log(response?.data);
       setAlert(response.data.message);
       setToggleRefresh(!toggleRefresh);
       setSelectedImage("");
@@ -103,6 +100,7 @@ export default function Home({ profileImg, userName }) {
     }
   };
 
+  // DELETE: user delete with userId
   const deletePostHandler = async (_id) => {
     try {
       setIsLoading(true);
@@ -113,7 +111,7 @@ export default function Home({ profileImg, userName }) {
       });
 
       setIsLoading(false);
-      console.log(response.data);
+      // console.log(response?.data);
       setAlert(response.data.message);
       setToggleRefresh(!toggleRefresh);
     } catch (error) {
@@ -123,6 +121,7 @@ export default function Home({ profileImg, userName }) {
     }
   };
 
+  // PUT: edit user with userId
   const editSaveSubmitHandler = async (e) => {
     e.preventDefault();
     const _id = e.target.elements[0].value;
@@ -138,7 +137,7 @@ export default function Home({ profileImg, userName }) {
       });
 
       setIsLoading(false);
-      console.log(response.data);
+      // console.log(response?.data);
       setAlert(response?.data?.message);
       setToggleRefresh(!toggleRefresh);
     } catch (error) {
@@ -207,13 +206,14 @@ export default function Home({ profileImg, userName }) {
       });
   };
 
+  // POST: user like a post with userId
   const doLikeHandler = async (_id) => {
     try {
       setIsLoading(true);
       const response = await axios.post(`${baseUrl}/api/v1/post/${_id}/dolike`);
 
       setIsLoading(false);
-      console.log(response.data);
+      // console.log(response?.data);
       setAlert(response.data.message);
       // setToggleRefresh(!toggleRefresh);
     } catch (error) {
@@ -388,20 +388,6 @@ export default function Home({ profileImg, userName }) {
                       />
                       Share
                     </div>
-                    {/* <div className="allpost-btn">
-                      <IoChatbubbleEllipsesOutline
-                        style={{ color: "#495057", marginRight: "5px" }}
-                      />
-                      <button
-                        // class="btn btn-outline-light "
-                        className="delBtn"
-                        onClick={(e) => {
-                        navigate(`/chat/${post?.authorObject?._id}`);
-                        }}
-                      >
-                        Message
-                      </button>
-                    </div> */}
                   </div>
                   <br />
                   <div className="buttons">
@@ -435,3 +421,11 @@ export default function Home({ profileImg, userName }) {
     </div>
   );
 }
+
+
+// const response = await axios.post(`${baseUrl}/api/v1/post`, {
+//   // title: postTitleInputRef.current.value,
+//   text: postTextInputRef.current.value,
+// });
+  
+// formData.append("title", postTitleInputRef.current.value);

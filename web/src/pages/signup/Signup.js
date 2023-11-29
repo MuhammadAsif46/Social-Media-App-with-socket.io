@@ -1,10 +1,14 @@
+// Import react:
 import { useRef, useState, useEffect, useContext } from "react";
+
+// Import Labraries:
 import axios from "axios";
-import "./Signup.css";
 import { Link } from "react-router-dom";
 
-import { baseUrl } from "../../core";
+// Import data from files:
 import { GlobalContext } from "../../context/Context";
+import { baseUrl } from "../../core";
+import "./Signup.css";
 
 const Signup = () => {
   const { state, dispatch } = useContext(GlobalContext);
@@ -26,9 +30,11 @@ const Signup = () => {
     }, 4000);
   }, [alertMessage, errorMessage]);
 
+  // Function:
+  // POST: user signup
   const SignupSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log("Signup submit handler");
+    // console.log("Signup submit handler")
 
     if (
       passwordInputRef.current.value !== repeatPasswordInputRef.current.value
@@ -47,7 +53,7 @@ const Signup = () => {
         password: passwordInputRef.current.value,
       });
 
-      console.log("response: ", response.data.message);
+      // console.log("response: ", response.data.message);
       setAlertMessage(response.data.message);
       e.target.reset();
     } catch (e) {
