@@ -1,7 +1,6 @@
-
+// Import Libraries:
 import express from 'express';
 import { nanoid } from 'nanoid'
-import { client } from './../mongodb.mjs'
 import { ObjectId } from 'mongodb'
 import OpenAI from "openai";
 import admin from "firebase-admin";
@@ -9,12 +8,16 @@ import multer, { diskStorage } from "multer";
 import fs from "fs";
 
 
+// Imports Data from files:
+import { client } from './../mongodb.mjs'
+import { globalIoObject, socketUsers } from '../core.mjs';
+
+
+// Create Database, Collections and path: 
 const db = client.db("dbcrud");
 const messagesCollection = db.collection("messages");
 const col = db.collection("posts");
 const userCollection = db.collection("users");
-import { globalIoObject, socketUsers } from '../core.mjs';
-
 
 
 let router = express.Router()
@@ -23,10 +26,11 @@ const openaiClient = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+// POST: create message
 router.post("/message", multer().none(), async (req, res, next) => {
 
-    console.log("req.body: ", req.body);
-    console.log("req.currentUser: ", req.currentUser);
+    // console.log("req.body: ", req.body);
+    // console.log("req.currentUser: ", req.currentUser);
 
     if (!req.body.to_id || !req.body.messageText) {
         res.status(403);
@@ -58,7 +62,7 @@ router.post("/message", multer().none(), async (req, res, next) => {
         
 
         const insertResponse = await messagesCollection.insertOne(newMessage);
-        console.log("insertResponse: ", insertResponse);
+        // console.log("insertResponse: ", insertResponse);
 
         newMessage._id = insertResponse.insertedId;
 
@@ -81,6 +85,7 @@ router.post("/message", multer().none(), async (req, res, next) => {
 
 });
 
+// GET: all messages with id
 router.get("/messages/:from_id", async (req, res, next) => {
 
     if (!req.params.from_id) {

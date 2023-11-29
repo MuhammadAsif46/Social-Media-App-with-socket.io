@@ -1,5 +1,4 @@
-import img1 from "./../../assets/img1.jpg";
-import img2 from "./../../assets/img2.jpg";
+
 import { useParams } from "react-router-dom";
 import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";

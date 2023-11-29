@@ -1,29 +1,40 @@
+// Import Libraries:
 import express from "express";
 import { nanoid } from "nanoid";
-import { client } from "./../mongodb.mjs";
 import { ObjectId } from "mongodb";
-import { openai as openaiClient } from "./../mongodb.mjs";
 import admin from "firebase-admin";
 import multer, { diskStorage } from "multer";
 import fs from "fs";
 
-const db = client.db("dbcrud"); // create database  // document base database
-const col = db.collection("posts"); // create collection
+
+// Imports Data from files:
+import { client } from "./../mongodb.mjs";
+import { openai as openaiClient } from "./../mongodb.mjs";
+
+
+// Create Database and Collections: 
+const db = client.db("dbcrud"); 
+const col = db.collection("posts"); 
 const userCollection = db.collection("users");
 
-//==============================================
 //file uplaod work:
+//==============================================
+
 const storageConfig = diskStorage({    // https://www.npmjs.com/package/multer#diskstorage
   destination: "./uploads/",
   filename: function (req, file, cb) {
-    console.log("mul-file: ", file);
+    // console.log("mul-file: ", file);
     cb(null, `postImg-${new Date().getTime()}-${file.originalname}`);
   },
 });
+
 let upload = multer({ storage: storageConfig });
+
 //==============================================
 
-// https://firebase.google.com/docs/storage/admin/start
+
+// https://firebase.google.com/docs/storage/admin/start:
+
 let serviceAccount =  {
   type: "service_account",
   project_id: "react-assignment-cv",
@@ -40,17 +51,20 @@ let serviceAccount =  {
     "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-prf42%40react-assignment-cv.iam.gserviceaccount.com",
   universe_domain: "googleapis.com",
 };
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   // databaseURL: "https://smit-b9.firebaseio.com"
 });
+
 const bucket = admin.storage().bucket("react-assignment-cv.appspot.com");
 
 //==============================================
 
+
 let router = express.Router();
 
-// search : /api/v1/search?q=car
+// GET: vector Search
 router.get("/search", async (req, res, next) => {
 
   try {
@@ -60,7 +74,7 @@ router.get("/search", async (req, res, next) => {
     });
 
     const vector = response?.data[0]?.embedding;
-    console.log("vector: ", vector);
+    // console.log("vector: ", vector);
     // [ 0.0023063174, -0.009358601, 0.01578391, ... , 0.01678391, ]
 
     // Query for similar documents.
@@ -88,9 +102,9 @@ router.get("/search", async (req, res, next) => {
       .toArray();
 
       documents.map((eachMatch) => {
-        console.log(`score ${eachMatch?.score?.toFixed(3)} => ${JSON.stringify(eachMatch)}\n\n`);
+        // console.log(`score ${eachMatch?.score?.toFixed(3)} => ${JSON.stringify(eachMatch)}\n\n`);
       });
-      console.log(`${documents.length} records found `);
+      // console.log(`${documents.length} records found `);
           
     res.send(documents);
 
@@ -100,8 +114,8 @@ router.get("/search", async (req, res, next) => {
   }
 });
 
-// POST    /api/v1/post
 
+// POST: Create a new post user:
 router.post("/post", //file upload
   (req, res, next) => {
     req.decoded = { ...req.body.decoded };
@@ -126,7 +140,8 @@ router.post("/post", //file upload
 
     // TODO: save file in storage bucket and get public url
     //file upload work
-    console.log("req.files: ", req.files);
+
+    // console.log("req.files: ", req.files);
 
     if (req.files[0].size > 2000000) { // size bytes, limit of 2MB
       res.status(403).send({ message: "File size limit exceed, max limit 2MB" });
@@ -144,6 +159,7 @@ router.post("/post", //file upload
           // console.log("api resp: ", apiResponse);
 
           // https://googleapis.dev/nodejs/storage/latest/Bucket.html#getSignedUrl
+
           file.getSignedUrl({
               action: "read",
               expires: "03-09-2491",
@@ -162,7 +178,7 @@ router.post("/post", //file upload
                     createdOn: new Date(),
                   });
 
-                  console.log("insertResponse : ", insertResponse);
+                  // console.log("insertResponse : ", insertResponse);
 
                   res.send({ message: "post created" });
                 } catch (err) {
@@ -193,11 +209,8 @@ router.post("/post", //file upload
   }
 );
 
+// GET: All post users get
 router.get("/feed", async (req, res, next) => {
-
-  //  const cursor = col.find({})
-  //   .sort({ _id: -1 })
-  //   .limit(100);
 
   const cursor = col.aggregate([
     {
@@ -251,7 +264,7 @@ router.get("/feed", async (req, res, next) => {
   }
 });
 
-// post?_id=123455
+// GET: All post users get old
 router.get("/posts", async (req, res, next) => {
 
   const userId = req.query._id || req.body.decoded._id;
@@ -268,7 +281,7 @@ router.get("/posts", async (req, res, next) => {
 
   try {
     let results = await cursor.toArray();
-    console.log("results: ", results);
+    // console.log("results: ", results);
     res.send(results);
   } catch (err) {
     console.log(" error getting data mongodb : ", err);
@@ -276,7 +289,7 @@ router.get("/posts", async (req, res, next) => {
   }
 });
 
-// GET     /api/v1/post/:postId
+// GET: get post with user id
 router.get("/post/:postId", async (req, res, next) => {
 
   if (!ObjectId.isValid(req.params.postId)) {
@@ -295,6 +308,7 @@ router.get("/post/:postId", async (req, res, next) => {
 
 });
 
+// profile middleware
 const getProfileMiddleware = async (req, res, next) => {
 
   const userId = req.params.userId || req.body.decoded._id;
@@ -323,9 +337,11 @@ const getProfileMiddleware = async (req, res, next) => {
   }
 };
 
+// GET: all profile and profile id
 router.get("/profile", getProfileMiddleware);
 router.get("/profile/:userId", getProfileMiddleware);
 
+// PUT: edit user post with id
 router.put("/post/:postId", async (req, res, next) => {
 
   if (!ObjectId.isValid(req.params.postId)) {
@@ -363,7 +379,7 @@ router.put("/post/:postId", async (req, res, next) => {
       }
     );
 
-    console.log("updateResponse : ", updateResponse);
+    // console.log("updateResponse : ", updateResponse);
 
     res.send("post updated");
   } catch (err) {
@@ -372,7 +388,7 @@ router.put("/post/:postId", async (req, res, next) => {
   }
 });
 
-// DELETE  /api/v1/post/:userId/:postId
+// DELETE: user post with id 
 router.delete("/post/:postId", async (req, res, next) => {
   
   if (!ObjectId.isValid(req.params.postId)) {
@@ -384,7 +400,7 @@ router.delete("/post/:postId", async (req, res, next) => {
     const deleteResponse = await col.deleteOne({
       _id: new ObjectId(req.params.postId),
     });
-    console.log("deleteResponse : ", deleteResponse);
+    // console.log("deleteResponse : ", deleteResponse);
 
     res.send({ message: "post delete" });
 
@@ -394,6 +410,7 @@ router.delete("/post/:postId", async (req, res, next) => {
   }
 });
 
+// POST: user post like
 router.post("/post/:postId/dolike", async (req, res, next) => {
   if (!ObjectId.isValid(req.params.postId)) {
     res.status(403).send(`Invalid post id`);
@@ -409,7 +426,7 @@ router.post("/post/:postId/dolike", async (req, res, next) => {
         },
       }
     );
-    console.log("doLikeResponse: ", doLikeResponse);
+    // console.log("doLikeResponse: ", doLikeResponse);
     res.send({ message:"like done" });
   } catch (e) {
     console.log("error like post mongodb: ", e);

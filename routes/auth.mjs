@@ -1,17 +1,23 @@
-import express from "express"; //import express in express
-import jwt from "jsonwebtoken"; //import jwt in jwt
-import { client } from "./../mongodb.mjs"; //import client in mongoDb.mjs file
-import { stringToHash, verifyHash } from "bcrypt-inzi"; //import stringToHash and verifyHash in bcrypt-inzi
-import otpGenerator from "otp-generator"; //import otpGenerator in otp-generator
-import moment from "moment"; //import moment in moment
+// Import Libraries:
+import express from "express"; 
+import jwt from "jsonwebtoken"; 
+import { stringToHash, verifyHash } from "bcrypt-inzi"; 
+import otpGenerator from "otp-generator"; 
+import moment from "moment"; 
 
-let router = express.Router(); //initialize express router
 
-const userCollection = client.db("dbcrud").collection("users"); //create DB and userCollection
-const otpCollection = client.db("dbcrud").collection("otpCodes"); //create DB and otpCollection
+// Imports Data from file:
+import { client } from "./../mongodb.mjs"; 
 
+
+// Create Database and Collections: 
+const userCollection = client.db("dbcrud").collection("users"); 
+const otpCollection = client.db("dbcrud").collection("otpCodes"); 
+
+let router = express.Router(); 
+
+// POST: user login
 router.post("/login", async (req, res, next) => {
-  // create login API
 
   if (!req.body?.email || !req.body?.password) {
     // condition check
@@ -28,7 +34,7 @@ router.post("/login", async (req, res, next) => {
   req.body.email = req.body.email.toLowerCase(); //convert email to lower case
 
   try {
-    let result = await userCollection.findOne({ email: req.body.email }); //find Email in userCollection
+    let result = await userCollection.findOne({ email: req.body.email });
     // console.log("result: ", result);
 
     if (!result) {
@@ -39,8 +45,8 @@ router.post("/login", async (req, res, next) => {
       });
       return;
     } else {
+      
       // user found
-
       const isMatch = await verifyHash(req.body.password, result.password);
 
       if (isMatch) {
@@ -95,15 +101,15 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+// POST: user logout
 router.post("/logout", (req, res, next) => {
-  // create logout API
 
   res.clearCookie("token"); // clear cookie
   res.send({ message: "logout successful" }); // send message user
 });
 
+// POST: user signup
 router.post("/signup", async (req, res, next) => {
-  // create signup API
 
   if (
     !req.body?.firstName ||
@@ -128,7 +134,7 @@ router.post("/signup", async (req, res, next) => {
 
   try {
     let result = await userCollection.findOne({ email: req.body.email });
-    console.log("result: ", result); // [{...}] []
+    // console.log("result: ", result); // [{...}] []
 
     if (!result) {
       //user not found
@@ -144,7 +150,7 @@ router.post("/signup", async (req, res, next) => {
         createdOn: new Date(),
       });
 
-      console.log("insertResponse : ", insertResponse);
+      // console.log("insertResponse : ", insertResponse);
 
       res.send({ message: "Signup Succssful" });
     } else {
@@ -159,8 +165,8 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
+// POST: user forget password
 router.post("/forget-password", async (req, res, next) => {
-  //create forgetPassword API
 
   if (!req.body?.email) {
     res.status(403);
@@ -192,7 +198,7 @@ router.post("/forget-password", async (req, res, next) => {
       specialChars: false,
     });
 
-    console.log("otpCode: ", otpCode);
+    // console.log("otpCode: ", otpCode);
 
     const otpCodeHash = await stringToHash(otpCode);
 
@@ -201,7 +207,7 @@ router.post("/forget-password", async (req, res, next) => {
       otpCodeHash: otpCodeHash,
       createdOn: new Date(),
     });
-    console.log("insertResponse: ", insertResponse);
+    // console.log("insertResponse: ", insertResponse);
 
     res.send({ message: "Forget password otp send", otp: otpCode });
   } catch (e) {
@@ -210,8 +216,8 @@ router.post("/forget-password", async (req, res, next) => {
   }
 });
 
+// POST: user forget password complete
 router.post("/forget-password-complete", async (req, res, next) => {
-  //create forgetPasswordComplete API
 
   if (!req.body?.email || !req.body.otpCode || !req.body.newPassword) {
     res.status(403);
@@ -231,7 +237,7 @@ router.post("/forget-password-complete", async (req, res, next) => {
       { email: req.body.email },
       { sort: { _id: -1 } }
     );
-    console.log("otpRecord: ", otpRecord);
+    // console.log("otpRecord: ", otpRecord);
 
     if (!otpRecord) {
       // user not found
@@ -268,7 +274,7 @@ router.post("/forget-password-complete", async (req, res, next) => {
         $set: { password: passwordHash },
       }
     );
-    console.log("updateResp: ", updateResp);
+    // console.log("updateResp: ", updateResp);
 
     res.send({
       message: "Forget password completed, proceed to login with new password",
@@ -279,4 +285,4 @@ router.post("/forget-password-complete", async (req, res, next) => {
   }
 });
 
-export default router; // export router
+export default router;

@@ -1,27 +1,33 @@
-import express from "express"; // import express
-import cors from "cors"; // import cors
-import path from "path"; // import path
-import "dotenv/config"; // import dotenv
-import cookieParser from "cookie-parser"; // import cookie-parser
-import jwt from "jsonwebtoken"; // import jwt
-import { ObjectId } from "mongodb"; // import object
-import { createServer } from "http"; // import createServer in http package
-import { Server as socketIo } from "socket.io"; // import socketIo in socket.io
-import cookie from "cookie"; // import cookie
+// Import Libraries:
+import express from "express"; 
+import cors from "cors"; 
+import path from "path"; 
+import "dotenv/config";
+import cookieParser from "cookie-parser"; 
+import jwt from "jsonwebtoken"; 
+import { ObjectId } from "mongodb"; 
+import { createServer } from "http"; 
+import { Server as socketIo } from "socket.io"; 
+import cookie from "cookie"; 
 
-import { client } from "./mongodb.mjs"; // import client in mongodb.mjs file
-import authRouter from "./routes/auth.mjs"; // import authRouter in routes folder
-import postRouter from "./routes/post.mjs"; // import postRouter in routes folder
-import chatRouter from "./routes/chat.mjs"; // import chatRouter in routes folder
-import unAuthProfileRoutes from "./unAuthRoutes/profile.mjs"; // import unAuthRoutes in unAuthRoutes folder
-import { globalIoObject, socketUsers } from "./core.mjs"; // import globalIoObject and socketUsers in core.mjs file
+// Imports Data from files:
+import { client } from "./mongodb.mjs"; 
+import { globalIoObject, socketUsers } from "./core.mjs"; 
 
-const __dirname = path.resolve(); // create path
-const db = client.db("dbcrud"); // create database  // document base database
-const col = db.collection("posts"); // create post collection
-const userCollection = db.collection("users"); // create user collection
+// Imports Routes:
+import authRouter from "./routes/auth.mjs"; 
+import postRouter from "./routes/post.mjs"; 
+import chatRouter from "./routes/chat.mjs"; 
+import userRouter from "./routes/user.mjs"; 
+import unAuthProfileRoutes from "./unAuthRoutes/profile.mjs"; 
 
-const app = express(); // express app convert app
+// Create Database, Collections and path: 
+const __dirname = path.resolve();       
+const db = client.db("dbcrud");         
+const col = db.collection("posts");     
+const userCollection = db.collection("users");    
+
+const app = express();
 app.use(express.json()); // body parser
 app.use(cookieParser()); // cookie parser
 app.use(
@@ -32,11 +38,9 @@ app.use(
   })
 );
 
-// /api/v1/login
-app.use("/api/v1", authRouter); // unSecuri API
+app.use("/api/v1", authRouter); // unSecuri API --> Auth-APIs
 
-app.use("/api/v1", (req, res, next) => {
-  // JWT --- // bayriyar : yha sy agay na ja paye
+app.use("/api/v1", (req, res, next) => { // JWT --- // bayriyar : yha sy agay na ja paye
 
   // console.log("cookies: ", req.cookies);
 
@@ -70,67 +74,11 @@ app.use("/api/v1", (req, res, next) => {
   }
 });
 
-app.use("/api/v1", postRouter); // Securi API
-app.use("/api/v1", chatRouter); // Securi API
+app.use("/api/v1", postRouter); // Securi API --> Post-APIs
+app.use("/api/v1", chatRouter); // Securi API --> Chat-APIs
+app.use("/api/v1", userRouter); // Securi API --> User-APIs
 
-app.use("/api/v1/ping", (req, res) => {
-  // Securi API
-  res.send("OK");
-});
 
-app.get("/api/v1/users", async (req, res, next) => {
-  const userId = req.query._id || req.body.decoded._id;
-
-  if (!ObjectId.isValid(userId)) {
-    res.status(403).send(`Invalid user id`);
-    return;
-  }
-
-  const cursor = userCollection.find({}).sort({ _id: -1 }).limit(100);
-
-  try {
-    let results = await cursor.toArray();
-    console.log("results: ", results);
-
-    const modifiedUserList = results.map((eachUser) => {
-      let user = {
-        _id: eachUser._id,
-        firstName: eachUser.firstName,
-        lastName: eachUser.lastName,
-        email: eachUser.email,
-      };
-      if (eachUser._id.toString() === userId) {
-        user.me = true;
-        return user;
-      } else {
-        return user;
-      }
-    });
-
-    res.send(modifiedUserList);
-  } catch (err) {
-    console.log(" error getting data mongodb : ", err);
-    res.status(500).send("server error, please try later..");
-  }
-});
-
-app.get("/api/v1/user/:userId", async (req, res) => {
-  const userId = req.params.userId;
-
-  if (!ObjectId.isValid(userId)) {
-    res.status(403).send(`Invalid user id`);
-    return;
-  }
-
-  try {
-    const cursor = await userCollection.findOne({ _id: new ObjectId(userId) });
-    console.log("results: ", cursor);
-    res.send(cursor);
-  } catch (err) {
-    console.log(" error getting data mongodb : ", err);
-    res.status(500).send("server error, please try later..");
-  }
-});
 
 app.use("/", express.static(path.join(__dirname, "web/build"))); // static Hosting
 app.get("*", (req, res) => {

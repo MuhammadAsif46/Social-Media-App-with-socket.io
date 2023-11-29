@@ -1,11 +1,14 @@
-import { MongoClient } from 'mongodb';      // import MongoClient in mongodb
-import OpenAI from 'openai';                // import OpenAI in openai
+// Import Libraries:
+import { MongoClient } from 'mongodb';      
+import OpenAI from 'openai';                
 
+//define uri mongodb cluster
 const uri = "mongodb+srv://dbuser:dbpassword@cluster0.ovydsoh.mongodb.net/?retryWrites=true&w=majority";
-export const client = new MongoClient(uri);   //define uri mongodb cluster
+export const client = new MongoClient(uri);
 
 
-async function run() {      // create function to execute when connection is established
+// create function to execute when connection is established
+async function run() {      
     try {
         await client.connect();
         console.log("Successfully connected to Atlas");
@@ -17,13 +20,14 @@ async function run() {      // create function to execute when connection is est
 }
 run().catch(console.dir);
 
-process.on("SIGINT", async function(){      // close app
+// close app
+process.on("SIGINT", async function(){      
     console.log("app is terminating");
     await client.close();
     process.exit(0);
 });
 
-
-export const openai = new OpenAI({          // openai key 
+// openai key 
+export const openai = new OpenAI({          
     apiKey: process.env.OPENAI_API_KEY,
 });
