@@ -45,7 +45,7 @@ div.second-child{
 .loginBtn{
     margin: 0.5rem 0;
     height: 3rem;
-    width: 20.5rem;
+    width: 100%;
 }
 
 .newBtn{
@@ -140,7 +140,7 @@ p.app-text{
         padding: 0;
     }
     .loginBtn{
-        width: 14.4rem;
+        width: 100%;
     }
     .newBtn{
         width: 12.4rem;
