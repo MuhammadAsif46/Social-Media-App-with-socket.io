@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb';
 import OpenAI from 'openai';                
 
 //define uri mongodb cluster
-const uri = "mongodb+srv://dbuser:dbpassword@cluster0.ovydsoh.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://dbuser:asif123@cluster0.ovydsoh.mongodb.net/?retryWrites=true&w=majority";
 export const client = new MongoClient(uri);
 
 
